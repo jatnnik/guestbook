@@ -10,8 +10,6 @@ type CommentProps = {
 }
 
 const Comment = ({ stars, name, message, date }: CommentProps) => {
-  console.log(typeof date)
-
   return (
     <div className='p-8 border-2 border-gray-200 shadow-sm rounded-lg mb-4 bg-white'>
       <div className='flex space-x-2 text-yellow-500 mb-4'>
