@@ -1,28 +1,28 @@
-import * as React from "react"
-import { mutate } from "swr"
+import * as React from "react";
+import { mutate } from "swr";
 
 export default function RatingBox() {
-  const [stars, setStars] = React.useState(5)
-  const [hoverIndex, setHoverIndex] = React.useState<boolean | number>(false)
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [hasSubmitted, setHasSubmitted] = React.useState(false)
-  const [hasError, setHasError] = React.useState(false)
+  const [stars, setStars] = React.useState(5);
+  const [hoverIndex, setHoverIndex] = React.useState<boolean | number>(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [hasError, setHasError] = React.useState(false);
 
-  const nameRef = React.useRef<HTMLInputElement>(null)
-  const messageRef = React.useRef<HTMLTextAreaElement>(null)
+  const nameRef = React.useRef<HTMLInputElement>(null);
+  const messageRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const handleRating = (rating: number) => setStars(rating)
-  const handleMouseEnter = (rating: number) => setHoverIndex(rating)
-  const handleMouseLeave = () => setHoverIndex(false)
+  const handleRating = (rating: number) => setStars(rating);
+  const handleMouseEnter = (rating: number) => setHoverIndex(rating);
+  const handleMouseLeave = () => setHoverIndex(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const name = nameRef.current?.value.trim()
-    const message = messageRef.current?.value
+    event.preventDefault();
+    const name = nameRef.current?.value.trim();
+    const message = messageRef.current?.value;
 
-    const data = { stars, name, message, date: new Date() }
+    const data = { stars, name, message, date: new Date() };
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       const res = await fetch("/api/comments", {
@@ -31,27 +31,27 @@ export default function RatingBox() {
         headers: {
           "Content-Type": "application/json",
         },
-      })
+      });
 
       if (!res.ok) {
-        throw new Error()
+        throw new Error();
       }
 
-      setHasSubmitted(true)
-      mutate("/api/comments")
+      setHasSubmitted(true);
+      mutate("/api/comments");
     } catch (error) {
-      setHasError(true)
+      setHasError(true);
     }
 
-    setIsSubmitting(false)
-  }
+    setIsSubmitting(false);
+  };
 
   if (hasSubmitted) {
     return (
       <h2 className="text-center my-12 text-xl font-bold text-green-800">
         Danke für deinen Eintrag 😘
       </h2>
-    )
+    );
   }
 
   return (
@@ -64,7 +64,8 @@ export default function RatingBox() {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={`h-10 w-10 hover:opacity-100 ${
-              stars >= i + 1 || (hoverIndex && hoverIndex >= i)
+              stars >= i + 1 ||
+              (typeof hoverIndex === "number" && hoverIndex >= i)
                 ? "opacity-100"
                 : "opacity-30"
             }`}
@@ -144,5 +145,5 @@ export default function RatingBox() {
         )}
       </form>
     </div>
-  )
+  );
 }
